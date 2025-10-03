@@ -2,7 +2,7 @@
   "name": "front-mapa-crueh",
   "private": true,
   "version": "0.0.0",
-  "homepage": ".",
+  "homepage": "https://vicentechavarrodev.github.io/front-mapa-crueh",
   "type": "module",
   "scripts": {
     "dev": "vite",
