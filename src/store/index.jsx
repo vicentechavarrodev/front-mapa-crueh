@@ -1,18 +1,16 @@
-import { createLogger } from 'redux-logger';
-import { configureStore ,combineReducers  } from '@reduxjs/toolkit';
+import logger from "redux-logger";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import mapReducers from "../components/map/slices.jsx";
+import ws_reducers from "../components/sockets/slices.jsx";
 
-const loggerMiddleware = createLogger();
 const rootReduc = combineReducers({
-    map :  mapReducers
+  map: mapReducers,
+  web_socket: ws_reducers,
 });
 
- const store = configureStore({
+const store = configureStore({
   reducer: rootReduc,
-  middleware: (getDefaultMiddleware) =>
-               getDefaultMiddleware()
-              .concat(loggerMiddleware) ,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 
 export default store;
-

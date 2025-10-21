@@ -1,19 +1,47 @@
 import { connect } from "react-redux";
-import { incrementar } from './slices';
-import {   obtener_mesas } from './services';
-import { loader } from "../../utils/loader";
+import { incrementar } from "./slices";
+import { obtener_mesas } from "./services";
+import {
+  wsConnected,
+  wsDisconnected,
+  wsMessageReceived,
+  wsError,
+} from "../sockets/slices";
 
+const Mapa = ({
+  contador,
+  incrementar,
+  obtener_mesas,
+  wsConnected,
+  wsMessageReceived,
+}) => {
+  const enviar = (e) => {
+    incrementar(1);
+    const socket = new WebSocket("wss://localhost:7286/gpssocket");
 
-const Contador = ({ contador,incrementar,obtener_mesas }) => {
+    socket.onopen = () => {
+      wsConnected();
+      console.log("WebSocket Connected");
+    };
 
-const enviar= (e) => {
-  loader.show();
-  incrementar(1);
-  obtener_mesas();
-}
+    socket.onmessage = (event) => {
+      wsMessageReceived(event.data);
+    };
+
+    socket.onclose = () => {
+      wsDisconnected();
+      console.log("WebSocket Disconnected");
+    };
+
+    socket.onerror = (error) => {
+      wsError(error.message);
+      console.error("WebSocket Error:", error);
+    };
+  };
+
   return (
     <div>
-      <p >Contador: {contador}</p>
+      <p>Contador: {contador}</p>
       <button className="button" onClick={enviar}>
         Incrementar
       </button>
@@ -22,12 +50,14 @@ const enviar= (e) => {
 };
 
 const mapStateToProps = (state) => ({
-  contador: state.map.contador 
+  contador: state.map.contador,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-   incrementar: (valor) => dispatch(incrementar(valor)),
-   obtener_mesas: () => dispatch(obtener_mesas()),
+  incrementar: (valor) => dispatch(incrementar(valor)),
+  obtener_mesas: () => dispatch(obtener_mesas()),
+  wsConnected: () => dispatch(wsConnected()),
+  wsMessageReceived: (valor) => dispatch(wsMessageReceived(valor)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Contador);
+export default connect(mapStateToProps, mapDispatchToProps)(Mapa);
