@@ -1,6 +1,6 @@
 export const initial_state = {
-  isConnected: false,
-  messages: null,
+  conectado: false,
   error: null,
-  posticiones: [],
+  posiciones: [],
+  token: null,
 };

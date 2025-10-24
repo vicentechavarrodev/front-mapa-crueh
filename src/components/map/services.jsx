@@ -1,4 +1,4 @@
-import { get_data, get_socket } from "../../services/api_helper";
+import { get_data } from "../../services/api_helper";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { map_constants } from "./constants";
 
@@ -9,7 +9,11 @@ const obtener_mesas = createAsyncThunk(
   async (arg, thunkAPI) => {
     let response;
     try {
-      response = await get_data(map_constants.API_URLS.OBTENER_MESAS);
+      response = await get_data(
+        "",
+        import.meta.env.VITE_PREFIX_BASE_URL,
+        map_constants.API_URLS.OBTENER_MESAS
+      );
       if (response.status === 200) {
         return response.data;
       }

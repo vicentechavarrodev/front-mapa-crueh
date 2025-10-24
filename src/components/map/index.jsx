@@ -1,42 +1,13 @@
 import { connect } from "react-redux";
 import { incrementar } from "./slices";
 import { obtener_mesas } from "./services";
-import {
-  wsConnected,
-  wsDisconnected,
-  wsMessageReceived,
-  wsError,
-} from "../sockets/slices";
+import { obtener_session } from "../sockets/services";
+import React from "react";
 
-const Mapa = ({
-  contador,
-  incrementar,
-  obtener_mesas,
-  wsConnected,
-  wsMessageReceived,
-}) => {
-  const enviar = (e) => {
+const Mapa = ({ contador, incrementar, obtener_mesas, obtener_session }) => {
+  const enviar = () => {
     incrementar(1);
-    const socket = new WebSocket("wss://localhost:7286/gpssocket");
-
-    socket.onopen = () => {
-      wsConnected();
-      console.log("WebSocket Connected");
-    };
-
-    socket.onmessage = (event) => {
-      wsMessageReceived(event.data);
-    };
-
-    socket.onclose = () => {
-      wsDisconnected();
-      console.log("WebSocket Disconnected");
-    };
-
-    socket.onerror = (error) => {
-      wsError(error.message);
-      console.error("WebSocket Error:", error);
-    };
+    obtener_session();
   };
 
   return (
@@ -56,8 +27,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   incrementar: (valor) => dispatch(incrementar(valor)),
   obtener_mesas: () => dispatch(obtener_mesas()),
-  wsConnected: () => dispatch(wsConnected()),
-  wsMessageReceived: (valor) => dispatch(wsMessageReceived(valor)),
+  obtener_session: () => dispatch(obtener_session()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Mapa);

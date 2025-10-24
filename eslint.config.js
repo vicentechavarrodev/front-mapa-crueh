@@ -6,22 +6,22 @@ import { defineConfig } from "eslint/config";
 export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs,jsx}"],
-    plugins: { js },
+    plugins: { js, react: pluginReact },
     extends: ["js/recommended"],
     languageOptions: {
       globals: {
+        ...globals.browser,
         "import.meta": "readonly",
       },
     },
   },
   {
-    files: ["**/*.js"],
-    languageOptions: { sourceType: "script" },
+    files: ["**/*.jsx"],
+    languageOptions: { sourceType: "module" },
     rules: {
       semi: ["error", "always"],
       quotes: ["error", "double"],
-      "no-console": "warn",
-      camelcase: "error",
+      "react/prop-types": 0,
     },
   },
 

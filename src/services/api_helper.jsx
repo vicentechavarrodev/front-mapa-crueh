@@ -1,12 +1,14 @@
 import axios from "axios";
 import { api_config } from "./api_config";
 
-export const get_data = async (endpoint) => {
+axios.defaults.withCredentials = true;
+
+export const get_data = async (url_base, service_prefix, endpoint) => {
   try {
     const response = await axios
-      .get(`/${api_config.PREFIX}/${endpoint}`, {
-        auth: api_config.AUTH,
+      .get(`${url_base}/${service_prefix}/${endpoint}`, {
         headers: api_config.HEADERS,
+        auth: api_config.AUTH,
       })
       .then((response) => {
         return response;
@@ -21,24 +23,28 @@ export const get_data = async (endpoint) => {
   }
 };
 
-export const post_data = async (endpoint, data) => {
+export const post_data = async (
+  url_base,
+  service_prefix,
+  endpoint,
+  data,
+  auth,
+  headers,
+  params
+) => {
   try {
     const response = await axios.post(
-      `${api_config.API_BASE_URL_DEV}/${endpoint}`,
-      data
+      `${url_base}/${service_prefix}/${endpoint}`,
+      data,
+      {
+        headers,
+        auth: auth ? auth : {},
+        params: params ? params : {},
+      }
     );
-    return response.data;
+    return response;
   } catch (error) {
     console.log("Error al enviar datos:", error);
-    throw error;
-  }
-};
-
-export const get_socket = async (endpoint, data) => {
-  try {
-    return new WebSocket(`/${api_config.PREFIX}/${endpoint}`);
-  } catch (error) {
-    console.log("Error al obtener socket:", error);
     throw error;
   }
 };

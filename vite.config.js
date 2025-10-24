@@ -7,9 +7,15 @@ export default ({ mode }) => {
   return defineConfig({
     plugins: [react()],
     server: {
+      port: 3000,
       proxy: {
         "/api": {
-          target: env.VITE_EXTRANET_URL,
+          target: env.VITE_BASE_TRACCAR_URL,
+          secure: false,
+        },
+        "/api/session": {
+          changeOrigin: true,
+          target: env.VITE_BASE_TRACCAR_URL,
           secure: false,
         },
         "/api/socket": {
