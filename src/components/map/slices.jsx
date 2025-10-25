@@ -11,6 +11,9 @@ const map_slice = createSlice({
     incrementar: (state, action) => {
       state.contador += action.payload;
     },
+    abrir_dialogo: (state, action) => {
+      state.abrir_dialogo = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -32,5 +35,5 @@ const map_slice = createSlice({
   },
 });
 
-export const { incrementar } = map_slice.actions;
+export const { incrementar, abrir_dialogo } = map_slice.actions;
 export default map_slice.reducer;
