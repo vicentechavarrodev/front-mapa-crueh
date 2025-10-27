@@ -15,8 +15,12 @@ const ws_slice = createSlice({
       if (posiciones.positions != null) {
         state.posiciones = [];
         posiciones.positions.map((p, index) => {
-          const { latitude, longitude } = p;
-          state.posiciones.push({ lat: latitude, lng: longitude });
+          const { latitude, longitude, deviceId } = p;
+          state.posiciones.push({
+            lat: latitude,
+            lng: longitude,
+            Id: deviceId,
+          });
         });
       }
     },
