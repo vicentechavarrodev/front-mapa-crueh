@@ -8,11 +8,14 @@ const map_slice = createSlice({
   name: map_constants.MAPSLICE,
   initialState: initial_state,
   reducers: {
-    incrementar: (state, action) => {
-      state.contador += action.payload;
+    setMapCenter: (state, action) => {
+      state.center = action.payload;
     },
-    abrir_dialogo: (state, action) => {
-      state.abrir_dialogo = action.payload;
+    setMapZoom: (state, action) => {
+      state.zoom = action.payload;
+    },
+    addMarker: (state, action) => {
+      state.markers.push(action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -35,5 +38,5 @@ const map_slice = createSlice({
   },
 });
 
-export const { incrementar, abrir_dialogo } = map_slice.actions;
+export const { setMapCenter, setMapZoom, addMarker } = map_slice.actions;
 export default map_slice.reducer;

@@ -26,8 +26,8 @@ import {
 const NavUser = ({ user }) => {
   const { isMobile } = useSidebar();
   return (
-    <SidebarMenu>
-      <SidebarMenuItem>
+    <form>
+      <div className="relative">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
@@ -78,8 +78,8 @@ const NavUser = ({ user }) => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </SidebarMenuItem>
-    </SidebarMenu>
+      </div>
+    </form>
   );
 };
 
