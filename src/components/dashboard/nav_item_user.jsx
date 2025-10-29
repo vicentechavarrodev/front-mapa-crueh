@@ -23,6 +23,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { ButtonGroup } from "@/components/ui/button-group";
 const NavUser = ({ user }) => {
   const { isMobile } = useSidebar();
   return (
@@ -30,9 +31,9 @@ const NavUser = ({ user }) => {
       <div className="relative">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
+            <ButtonGroup
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground gap-2 rounded-sm p-1 cursor-pointer"
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
@@ -42,8 +43,7 @@ const NavUser = ({ user }) => {
                 <span className="truncate font-medium">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
-            </SidebarMenuButton>
+            </ButtonGroup>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
@@ -67,14 +67,14 @@ const NavUser = ({ user }) => {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Account
+                Configurar
               </DropdownMenuItem>
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOut />
-              Log out
+              Salir
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

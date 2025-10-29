@@ -10,6 +10,7 @@ import {
   AdvancedMarker,
   Pin,
 } from "@vis.gl/react-google-maps";
+import { Ambulance } from "lucide-react";
 
 const Mapa = ({
   contador,
@@ -55,23 +56,19 @@ const Mapa = ({
     };
     addMarker(newMarker);
   };
-
   return (
     <APIProvider apiKey="AIzaSyD-LTFrMgrDrXBGYCXolovaGeMg3HxKpHM">
       <div style={{ height: "100%", width: "100%" }}>
         <Map
+          mapId={"e9c2ac2a270ec4d653d29524"}
           center={center}
           zoom={zoom}
           onCameraChanged={handleMapCameraChanged}
           onClick={handleMapClick}
         >
           {posiciones.map((p, index) => (
-            <AdvancedMarker key={index} position={center}>
-              <Pin
-                background={"#FBBC04"}
-                borderColor={"#FBBC04"}
-                glyphColor={"#000"}
-              />
+            <AdvancedMarker key={index} position={{ lat: p.lat, lng: p.lng }}>
+              <Ambulance size={32} />
             </AdvancedMarker>
           ))}
         </Map>
