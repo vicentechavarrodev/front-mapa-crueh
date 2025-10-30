@@ -12,8 +12,6 @@ const ws_slice = createSlice({
     },
     ws_mensaje: (state, action) => {
       const posiciones = JSON.parse(action.payload);
-
-      console.log(state.center);
       if (posiciones.positions != null) {
         state.posiciones = [];
         posiciones.positions.map((p, index) => {
