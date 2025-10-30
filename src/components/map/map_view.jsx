@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import geojsonData from "../../data_geojson/comunas_neiva_polygon.json";
-import { Map, AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
+import {
+  Map,
+  AdvancedMarker,
+  useMap,
+  useMapsLibrary,
+} from "@vis.gl/react-google-maps";
 import { Ambulance } from "lucide-react";
 import { connect } from "react-redux";
 import { setMapCenter, setMapZoom, addMarker } from "./slices";
@@ -14,12 +19,11 @@ const MapView = ({
   addMarker,
 }) => {
   const current_map = useMap();
+  const maps3d = useMapsLibrary("maps3d");
 
   useEffect(() => {
     if (!current_map) return;
-    current_map.data.forEach((feature, index) =>
-      console.log(feature.elements[index])
-    );
+    current_map.data.forEach((feature) => map.data.remove(feature));
     current_map.data.addGeoJson(geojsonData);
     current_map.data.addListener("click", (event) => {
       const clickedFeature = event.feature;
@@ -30,10 +34,10 @@ const MapView = ({
       const color = feature.getProperty("color");
 
       return {
-        weight: 1,
-        fillColor: color,
-        color: color,
+        strokeWeight: 1,
+        strokeColor: color,
         fillOpacity: 0.3,
+        fillColor: color,
       };
     });
   }, [current_map]);
@@ -48,13 +52,40 @@ const MapView = ({
       position: { lat: event.detail.latLng.lat, lng: event.detail.latLng.lng },
       id: Date.now(),
     };
-
     addMarker(newMarker);
   };
 
   const handleMarkerClick = (event) => {
-    console.log(current_map);
-    //map.flyTo({ center: [-74.5, 40], zoom: 9 });
+    var latitud = event.latLng.lat();
+    var longitude = event.latLng.lng();
+
+    if (current_map && maps3d) {
+      const flyToCamera = {
+        center: { lat: latitud, lng: longitude },
+        heading: (2 / 1000) * 3,
+        tilt: 45,
+        zoom: 18,
+      };
+
+      const degreesPerSecond = 3;
+      let animationFrameId;
+
+      const animateCamera = (time) => {
+        if (current_map) {
+          current_map.moveCamera({
+            heading: (time / 1000) * degreesPerSecond,
+            center: { lat: latitud, lng: longitude },
+            tilt: 45,
+            zoom: 18,
+          });
+        }
+        animationFrameId = requestAnimationFrame(animateCamera);
+      };
+      //cancelAnimationFrame(animationFrameId);
+      animationFrameId = requestAnimationFrame(animateCamera);
+
+      //current_map.moveCamera(flyToCamera);
+    }
   };
 
   return (

@@ -3,7 +3,7 @@ export const initial_state = {
   mesas: [],
   error: "",
   cargando: false,
-  center: { lat: 2.944928, lng: -75.279233 }, // Default center (e.g., Los Angeles)
+  center: { lat: 2.9376, lng: -75.280732 },
   zoom: 13,
   markers: [],
 };

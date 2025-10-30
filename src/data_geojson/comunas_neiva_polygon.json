@@ -2,7 +2,7 @@
     "type": "FeatureCollection",
     "features": [{
             "type": "Feature",
-            "properties": {"id":3,"color":"#DEDEDE"},
+            "properties": {"id":3,"color":"#F7C8DA"},
             "geometry": {
                 "type": "Polygon",
                 "key": 1,
