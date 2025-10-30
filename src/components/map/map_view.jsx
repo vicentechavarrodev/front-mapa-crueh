@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import geojsonData from "../../data_geojson/comunas_neiva.json";
+import geojsonData from "../../data_geojson/comunas_neiva_polygon.json";
 import { Map, AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
 import { Ambulance } from "lucide-react";
 import { connect } from "react-redux";
@@ -17,19 +17,23 @@ const MapView = ({
 
   useEffect(() => {
     if (!current_map) return;
-
+    current_map.data.forEach((feature, index) =>
+      console.log(feature.elements[index])
+    );
     current_map.data.addGeoJson(geojsonData);
+    current_map.data.addListener("click", (event) => {
+      const clickedFeature = event.feature;
+      const featureProperties = clickedFeature.getProperty("id");
+      console.log(featureProperties);
+    });
     current_map.data.setStyle(function (feature) {
-      // Example: Color polygons based on a property
-
-      const propertyValue = feature.getProperty("name"); // Assuming a 'name' property
-
-      console.log(propertyValue);
+      const color = feature.getProperty("color");
 
       return {
-        fillColor: "#ff0303ff",
-        strokeWeight: 1,
-        strokeColor: "#ff0a0aff", // Black stroke for all features
+        weight: 1,
+        fillColor: color,
+        color: color,
+        fillOpacity: 0.3,
       };
     });
   }, [current_map]);
