@@ -8,7 +8,7 @@ import {
 } from "@vis.gl/react-google-maps";
 import { Ambulance } from "lucide-react";
 import { connect } from "react-redux";
-import { setMapCenter, setMapZoom, addMarker } from "./slices";
+import { setMapCenter, setMapZoom, addMarker, updateMarker } from "./slices";
 
 const MapView = ({
   center,
@@ -17,6 +17,8 @@ const MapView = ({
   setMapCenter,
   setMapZoom,
   addMarker,
+  markers,
+  updateMarker,
 }) => {
   const current_map = useMap();
   const maps3d = useMapsLibrary("maps3d");
@@ -96,10 +98,10 @@ const MapView = ({
       handleMapCameraChanged={handleMapCameraChanged}
       onCameraChanged={handleMapCameraChanged}
     >
-      {posiciones.map((p, index) => (
+      {markers.map((m) => (
         <AdvancedMarker
-          key={index}
-          position={{ lat: p.lat, lng: p.lng }}
+          key={m.id}
+          position={m.position}
           onClick={handleMarkerClick}
         >
           <Ambulance size={32} />
@@ -113,6 +115,7 @@ const mapStateToProps = (state) => ({
   center: state.map.center,
   zoom: state.map.zoom,
   posiciones: state.web_socket.posiciones,
+  markers: state.web_socket.markers,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -120,6 +123,7 @@ const mapDispatchToProps = (dispatch) => ({
   setMapCenter: (value) => dispatch(setMapCenter(value)),
   setMapZoom: (value) => dispatch(setMapZoom(value)),
   addMarker: (value) => dispatch(addMarker(value)),
+  updateMarker: (value) => dispatch(updateMarker(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapView);

@@ -3,4 +3,5 @@ export const initial_state = {
   error: null,
   posiciones: [],
   token: null,
+  markers: [],
 };

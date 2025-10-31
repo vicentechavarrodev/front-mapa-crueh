@@ -17,6 +17,13 @@ const map_slice = createSlice({
     addMarker: (state, action) => {
       state.markers.push(action.payload);
     },
+    updateMarker: (state, action) => {
+      const { lat, lng, id } = action.payload;
+
+      state.markers.map((marker) =>
+        marker.id === id ? { ...marker, position: { lat, lng } } : marker
+      );
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -38,5 +45,6 @@ const map_slice = createSlice({
   },
 });
 
-export const { setMapCenter, setMapZoom, addMarker } = map_slice.actions;
+export const { setMapCenter, setMapZoom, addMarker, updateMarker } =
+  map_slice.actions;
 export default map_slice.reducer;

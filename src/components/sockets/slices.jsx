@@ -14,14 +14,37 @@ const ws_slice = createSlice({
       const posiciones = JSON.parse(action.payload);
       if (posiciones.positions != null) {
         state.posiciones = [];
+
         posiciones.positions.map((p, index) => {
           const { latitude, longitude, deviceId } = p;
           state.posiciones.push({
-            lat: latitude,
-            lng: longitude,
+            position: { lat: latitude, lng: longitude },
             id: deviceId,
           });
         });
+
+        state.markers = state.markers.filter((p) =>
+          state.posiciones.some((m) => p.id === m.id)
+        );
+
+        const nuevos = state.posiciones.filter(
+          (p) => !state.markers.some((m) => p.id === m.id)
+        );
+
+        if (nuevos.length !== 0) {
+          nuevos.map((p) => {
+            state.markers.push({
+              id: p.id,
+              position: p.position,
+            });
+          });
+        } else {
+          state.posiciones.map((p) => {
+            state.markers.map((marker) =>
+              marker.id === p.id ? { ...marker, position: p.position } : marker
+            );
+          });
+        }
       }
     },
     ws_desconectado: (state, action) => {
