@@ -8,21 +8,24 @@ const map_slice = createSlice({
   name: map_constants.MAPSLICE,
   initialState: initial_state,
   reducers: {
-    setMapCenter: (state, action) => {
+    asignar_map_center: (state, action) => {
       state.center = action.payload;
     },
-    setMapZoom: (state, action) => {
+    asignar_map_zoom: (state, action) => {
       state.zoom = action.payload;
     },
-    addMarker: (state, action) => {
+    agregar_marker: (state, action) => {
       state.markers.push(action.payload);
     },
-    updateMarker: (state, action) => {
+    actualizar_marker: (state, action) => {
       const { lat, lng, id } = action.payload;
 
       state.markers.map((marker) =>
         marker.id === id ? { ...marker, position: { lat, lng } } : marker
       );
+    },
+    asignar_id_animation: (state, action) => {
+      state.animationId = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -45,6 +48,12 @@ const map_slice = createSlice({
   },
 });
 
-export const { setMapCenter, setMapZoom, addMarker, updateMarker } =
-  map_slice.actions;
+export const {
+  asignar_map_center,
+  asignar_map_zoom,
+  agregar_marker,
+  updateMarker,
+  actualizar_marker,
+  asignar_id_animation,
+} = map_slice.actions;
 export default map_slice.reducer;

@@ -1,27 +1,36 @@
 import React, { useEffect } from "react";
 import geojsonData from "../../data_geojson/comunas_neiva_polygon.json";
-import {
-  Map,
-  AdvancedMarker,
-  useMap,
-  useMapsLibrary,
-} from "@vis.gl/react-google-maps";
+import { Map, AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
 import { Ambulance } from "lucide-react";
 import { connect } from "react-redux";
-import { setMapCenter, setMapZoom, addMarker, updateMarker } from "./slices";
+import {
+  asignar_map_center,
+  asignar_map_zoom,
+  agregar_marker,
+  actualizar_marker,
+  asignar_id_animation,
+} from "./slices";
+
+const handleMapClick = (event) => {
+  const newMarker = {
+    position: { lat: event.detail.latLng.lat, lng: event.detail.latLng.lng },
+    id: Date.now(),
+  };
+  agregar_marker(newMarker);
+};
 
 const MapView = ({
   center,
   zoom,
   posiciones,
-  setMapCenter,
-  setMapZoom,
-  addMarker,
   markers,
-  updateMarker,
+  asignar_map_center,
+  asignar_map_zoom,
+  agregar_marker,
+  actualizar_marker,
+  asignar_id_animation,
 }) => {
   const current_map = useMap();
-  const maps3d = useMapsLibrary("maps3d");
 
   useEffect(() => {
     if (!current_map) return;
@@ -32,6 +41,7 @@ const MapView = ({
       const featureProperties = clickedFeature.getProperty("id");
       console.log(featureProperties);
     });
+
     current_map.data.setStyle(function (feature) {
       const color = feature.getProperty("color");
 
@@ -45,30 +55,15 @@ const MapView = ({
   }, [current_map]);
 
   const handleMapCameraChanged = (event) => {
-    setMapCenter(event.detail.center);
-    setMapZoom(event.detail.zoom);
-  };
-
-  const handleMapClick = (event) => {
-    const newMarker = {
-      position: { lat: event.detail.latLng.lat, lng: event.detail.latLng.lng },
-      id: Date.now(),
-    };
-    addMarker(newMarker);
+    asignar_map_center(event.detail.center);
+    asignar_map_zoom(event.detail.zoom);
   };
 
   const handleMarkerClick = (event) => {
     var latitud = event.latLng.lat();
     var longitude = event.latLng.lng();
 
-    if (current_map && maps3d) {
-      const flyToCamera = {
-        center: { lat: latitud, lng: longitude },
-        heading: (2 / 1000) * 3,
-        tilt: 45,
-        zoom: 18,
-      };
-
+    if (current_map) {
       const degreesPerSecond = 3;
       let animationFrameId;
 
@@ -82,7 +77,10 @@ const MapView = ({
           });
         }
         animationFrameId = requestAnimationFrame(animateCamera);
+
+        asignar_id_animation(animationFrameId);
       };
+
       //cancelAnimationFrame(animationFrameId);
       animationFrameId = requestAnimationFrame(animateCamera);
 
@@ -95,7 +93,6 @@ const MapView = ({
       mapId={"e9c2ac2a270ec4d653d29524"}
       center={center}
       zoom={zoom}
-      handleMapCameraChanged={handleMapCameraChanged}
       onCameraChanged={handleMapCameraChanged}
     >
       {markers.map((m) => (
@@ -120,10 +117,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   abrir_dialogo: (value) => dispatch(abrir_dialogo(value)),
-  setMapCenter: (value) => dispatch(setMapCenter(value)),
-  setMapZoom: (value) => dispatch(setMapZoom(value)),
-  addMarker: (value) => dispatch(addMarker(value)),
-  updateMarker: (value) => dispatch(updateMarker(value)),
+  asignar_map_center: (value) => dispatch(asignar_map_center(value)),
+  asignar_map_zoom: (value) => dispatch(asignar_map_zoom(value)),
+  agregar_marker: (value) => dispatch(agregar_marker(value)),
+  actualizar_marker: (value) => dispatch(actualizar_marker(value)),
+  asignar_id_animation: (value) => dispatch(asignar_id_animation(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapView);

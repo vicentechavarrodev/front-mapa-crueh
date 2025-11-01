@@ -43,7 +43,6 @@ import {
   SidebarFooter,
   SidebarInput,
 } from "@/components/ui/sidebar";
-import { Skeleton } from "@/components/ui/skeleton";
 
 import {
   SidebarProvider,
@@ -85,17 +84,15 @@ const user = {
   avatar: "/avatars/shadcn.jpg",
 };
 
-const Dashboard = ({
-  children,
-  mostrar,
-  posiciones,
-  obtener_session,
-  incrementar,
-  contador,
-}) => {
+const Dashboard = ({ children, obtener_session, animationId }) => {
   const Enviar = () => {
-    console.log(contador);
-    return contador + 1;
+    console.log("IDDDDDDDDD");
+    // cancelAnimationFrame();
+  };
+
+  const Cancelar = () => {
+    console.log("IDDDDDDDDD");
+    cancelAnimationFrame(animationId);
   };
   useEffect(() => {
     obtener_session();
@@ -121,7 +118,7 @@ const Dashboard = ({
               <SidebarGroupContent className="px-1.5 md:px-0">
                 <SidebarMenu>
                   {items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
+                    <SidebarMenuItem key={item.title} onClick={Cancelar}>
                       <SidebarMenuButton
                         asChild
                         tooltip={{
@@ -129,9 +126,7 @@ const Dashboard = ({
                           hidden: false,
                         }}
                       >
-                        <a href={item.url}>
-                          <item.icon />
-                        </a>
+                        <item.icon />
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}
@@ -162,6 +157,7 @@ const Dashboard = ({
                   variant="outline"
                   size="sm"
                   className=" border-none shadow-none cursor-pointer"
+                  onClick={Enviar}
                 >
                   <Presentation /> Dashboard
                 </Button>
@@ -261,6 +257,7 @@ const Dashboard = ({
 const mapStateToProps = (state) => ({
   posiciones: state.web_socket.posiciones,
   contador: state.map.contador,
+  animationId: state.map.animationId,
 });
 
 const mapDispatchToProps = (dispatch) => ({

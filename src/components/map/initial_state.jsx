@@ -6,4 +6,5 @@ export const initial_state = {
   center: { lat: 2.9376, lng: -75.280732 },
   zoom: 13,
   markers: [],
+  animationId: 0,
 };
