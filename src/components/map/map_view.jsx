@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import geojsonData from "../../data_geojson/comunas_neiva_polygon.json";
 import { Map, AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
-import { Ambulance } from "lucide-react";
+import { Ambulance, Import } from "lucide-react";
 import { connect } from "react-redux";
 import {
   asignar_map_center,
@@ -77,20 +77,15 @@ const MapView = ({
           });
         }
         animationFrameId = requestAnimationFrame(animateCamera);
-
         asignar_id_animation(animationFrameId);
       };
-
-      //cancelAnimationFrame(animationFrameId);
       animationFrameId = requestAnimationFrame(animateCamera);
-
-      //current_map.moveCamera(flyToCamera);
     }
   };
 
   return (
     <Map
-      mapId={"e9c2ac2a270ec4d653d29524"}
+      mapId={import.meta.env.VITE_MAP_ID}
       center={center}
       zoom={zoom}
       onCameraChanged={handleMapCameraChanged}
